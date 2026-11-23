@@ -3,17 +3,13 @@ const { DATABASE_URL, TEST_DATABASE_URL  } = require('./config')
 
 const { Umzug, SequelizeStorage } = require('umzug')
 
-const databaseUrl = process.env.TESTING === 'true' 
-  ? TEST_DATABASE_URL
-  : DATABASE_URL
+const isTesting = process.env.TESTING === 'true'
+const databaseUrl = isTesting ? TEST_DATABASE_URL : DATABASE_URL
 
 const sequelize = new Sequelize(databaseUrl, {
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
-  },
+  dialectOptions: isTesting
+    ? {}
+    : { ssl: { require: true, rejectUnauthorized: false } },
 })
 
 const runMigrations = async () => {
