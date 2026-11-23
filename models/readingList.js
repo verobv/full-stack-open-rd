@@ -1,0 +1,36 @@
+const { Model, DataTypes } = require('sequelize')
+
+const { sequelize } = require('../util/db')
+
+class ReadingList extends Model {}
+
+ReadingList.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    references: { model: 'users', key: 'id' },
+    allowNull: false
+  },
+  blogId: {
+    type: DataTypes.INTEGER,
+    references: { model: 'blogs', key: 'id' },
+    allowNull: false
+  },
+  read: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    allowNull: false
+  }
+}, {
+  sequelize,
+  underscored: true,
+  timestamps: false,
+  modelName: 'readingList',
+  tableName: 'reading_list' 
+})
+
+module.exports = ReadingList
